@@ -11,6 +11,11 @@ type Data struct {
 }
 
 func New(cfg *Config) Data {
+	err := social_app.SeedLocalAccountsDatabase(cfg.SocialApp)
+	if err != nil {
+		panic(err)
+	}
+
 	return Data{
 		SocialAppData: cfg.SocialApp,
 	}

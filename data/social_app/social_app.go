@@ -34,10 +34,13 @@ var _localAccounts []schemas.AccountSchema
 var _localProfiles []schemas.ProfileSchema
 
 func (s *socialApp) GetLocalDatabase() (schemas.LocalDatabaseSchema, error) {
-	return schemas.LocalDatabaseSchema{
-		Accounts: _localAccounts,
-		Profiles: _localProfiles,
-	}, errors.New("[social_app] no data inside local database")
+	if len(_localAccounts) > 0 && len(_localProfiles) > 0 {
+		return schemas.LocalDatabaseSchema{
+			Accounts: _localAccounts,
+			Profiles: _localProfiles,
+		}, nil
+	}
+	return schemas.LocalDatabaseSchema{}, errors.New("[social_app] no data inside local database")
 }
 
 func (s *socialApp) GetLocalAccounts() ([]schemas.AccountSchema, error) {
@@ -55,7 +58,13 @@ func (s *socialApp) CreateAccountLocally(account schemas.AccountForm) (*schemas.
 		}
 	}
 
-	accountID := strconv.Itoa(len(_localAccounts) + 1)
+	// strconv.Itoa(len(_localAccounts) + 1)
+	var accountID = ""
+	if len(_localAccounts) == 0 {
+		accountID = "0"
+	} else {
+		accountID = strconv.Itoa(len(_localAccounts) + 1)
+	}
 
 	newAccount := schemas.AccountSchema{
 		AccountID: accountID,

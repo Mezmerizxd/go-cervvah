@@ -36,21 +36,15 @@ func (a *account) Login(c *gin.Context) {
 	// Get the login form
 	var r LoginForm
 	if err := c.ShouldBindJSON(&r); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": "Missing required fields"})
 		return
 	}
 
 	log.Println("Login form: ", r)
 
-	// // Verify the login details
-	// account, err := a.Features.SocialApp.Account.VerifyLoginDetails(r.Email, r.Password)
-	// if err != nil {
-	// 	c.JSON(500, gin.H{"error": err.Error()})
-	// 	return
-	// }
 	account, profile, err := a.Features.SocialAppFeatures.LoginAccount(r.Email, r.Password)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(500, gin.H{"message": "Unsuccessful login"})
 		return
 	}
 

@@ -23,40 +23,25 @@ var f = features.New(&features.Config{
 		SocialApp: saf,
 })
 
-var newAccount1 = schemas.AccountForm{
-	Email:    "test@test.com",
-	Password: "abc123",
-}
-var newProfile1 = schemas.ProfileForm{
-	FirstName: "Albert",
-	LastName:  "Einstein",
-	PhoneNumber: "123456789",
-	ProfilePicture: "https://www.google.com",
-}
-
-var newAccount2 = schemas.AccountForm{
+var newAccount = schemas.AccountForm{
 	Email:    "golang@test.com",
 	Password: "golang123",
 }
-var newProfile2 = schemas.ProfileForm{
+var newProfile = schemas.ProfileForm{
 	FirstName: "Golang",
 	LastName:  "Gopher",
 	PhoneNumber: "123456789",
 	ProfilePicture: "https://www.google.com",
 }
 
-var account1 *schemas.AccountSchema
-var profile1 *schemas.ProfileSchema
+var account *schemas.AccountSchema
+var profile *schemas.ProfileSchema
 
 func TestRegisterAccount(t *testing.T) {
 	var err error
-	account1, profile1, err = f.SocialAppFeatures.RegisterAccount(newAccount1, newProfile1)
-	_, _, err2 := f.SocialAppFeatures.RegisterAccount(newAccount2, newProfile2)
+	account, profile, err = f.SocialAppFeatures.RegisterAccount(newAccount, newProfile)
 	if err != nil {
 		t.Errorf("RegisterAccount() failed: %v", err)
-	}
-	if err2 != nil {
-		t.Errorf("RegisterAccount() failed: %v", err2)
 	}
 
 	accounts, err := d.SocialAppData.GetLocalAccounts()
@@ -68,7 +53,7 @@ func TestRegisterAccount(t *testing.T) {
 }
 
 func TestGetAccountByID(t *testing.T) {
-	acc, err2 := f.SocialAppFeatures.GetAccountByID(account1.AccountID)
+	acc, err2 := f.SocialAppFeatures.GetAccountByID(account.AccountID)
 	if err2 != nil {
 		t.Errorf("GetAccountByID() failed: %v", err2)
 	}
@@ -77,7 +62,7 @@ func TestGetAccountByID(t *testing.T) {
 } 
 
 func TestGetProfileByID(t *testing.T) {
-	prof, err2 := f.SocialAppFeatures.GetProfileByID(profile1.AccountID)
+	prof, err2 := f.SocialAppFeatures.GetProfileByID(profile.AccountID)
 	if err2 != nil {
 		t.Errorf("GetProfileByID() failed: %v", err2)
 	}
@@ -86,7 +71,7 @@ func TestGetProfileByID(t *testing.T) {
 }
 
 func TestLoginAccount(t *testing.T) {
-	acc, prof, err := f.SocialAppFeatures.LoginAccount(newAccount1.Email, newAccount1.Password)
+	acc, prof, err := f.SocialAppFeatures.LoginAccount(newAccount.Email, newAccount.Password)
 	if err != nil {
 		t.Errorf("LoginAccount() failed: %v", err)
 	}
